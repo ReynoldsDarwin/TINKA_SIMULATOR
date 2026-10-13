@@ -6,7 +6,6 @@ class MonteCarloSimulator {
         // Inicializa el Generador Congruencial Lineal (LCG) con la semilla dada[cite: 18]
         this.rng = new LCG(seed);
     }
-
     /**
      * Simula N sorteos de La Tinka para ver el rendimiento de un ticket.
      * @param {Array} ticket - Arreglo con los 6 números jugados (1 al 53).

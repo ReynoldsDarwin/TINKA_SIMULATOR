@@ -1,6 +1,8 @@
+// backend/src/app.js
 const express = require('express');
 const cors = require('cors');
 const gameRoutes = require('./routes/gameRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -10,5 +12,6 @@ app.use(express.json()); // Permite recibir JSON en el body (req.body)
 
 // Montar las rutas
 app.use('/api/game', gameRoutes);
+app.use('/api/users', userRoutes);
 
 module.exports = app;

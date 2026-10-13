@@ -1,0 +1,45 @@
+services:
+
+  # ── Backend Node.js ────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tinka_backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      # Persistencia de la base de datos SQLite fuera del contenedor
+      - sqlite_data:/app/db
+    networks:
+      - tinka_net
+    # Puerto 3001 en el host → 3000 dentro del contenedor
+    # El nginx del VPS hace proxy a localhost:3001/api/
+    ports:
+      - "127.0.0.1:3001:3000"
+
+  # ── Frontend React (build + nginx interno) ─────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: tinka_frontend
+    restart: unless-stopped
+    networks:
+      - tinka_net
+    # Puerto 8080 en el host → 80 dentro del contenedor
+    # El nginx del VPS hace proxy a localhost:8080
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  sqlite_data:
+    driver: local
+
+networks:
+  tinka_net:
+    driver: bridge
